@@ -1,7 +1,8 @@
 import os, sys, math, pygame, pygame.mixer
 from pygame.locals import *
-from euler import euler_sdm
+from euler import *
 from time import sleep
+import matplotlib.pyplot as plt
 
 h = 1.0/60
 START = 0.0
@@ -11,7 +12,10 @@ m = 10.0
 c = 15.0
 k = 100.0
 
-x, y = euler_sdm(h, START, END, m, c, k)
+x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_inst)
+plt.plot(x, y)
+plt.ion()
+plt.show()
 
 # Defining the screen size
 screen_size = screen_width, screen_height = 800, 600
@@ -88,7 +92,6 @@ while running:
   circle.display()
   # Displaying all the content
   pygame.display.flip()
-
 
 pygame.quit()
 sys.exit()

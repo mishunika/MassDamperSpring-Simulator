@@ -11,7 +11,22 @@ m = 10.0
 c = 15.0
 k = 100.0
 
-def euler_sdm(h, start, end, m, c, k):
+def func_zero(t):
+  return 0
+
+
+def func_sin(t):
+  return math.sin(t)
+
+
+def func_sin_cos_inst(t):
+  return 100 * math.sin(t) + 70 * math.cos(t * 5)
+
+
+def func_sin_cos_st(t):
+  return math.sin(t) + math.cos(t * 2)
+
+def euler_sdm(h, start, end, m, c, k, f):
   t = np.linspace(START, END, num=((1/h)* (END-START)))
   x = [ [0] * 2 ] * int((1/h) * 60)
   k1 = [0, 0]
@@ -22,9 +37,7 @@ def euler_sdm(h, start, end, m, c, k):
 
   for i in range(1, len(x)):
     k1[0] = x[i-1][1]
-    #k1[1] = (1 - c * x[i-1][1] - k * x[i-1][0]) / m
-    k1[1] = (100 * math.sin(t[i]) + 70 * math.cos(t[i] * 5) - c * x[i-1][1] - k * x[i-1][0]) / m
-    #k1[1] = (math.sin(t[i]) + math.cos(t[i]*2) - c * x[i-1][1] - k * x[i-1][0]) / m
+    k1[1] = (f(t[i]) - c * x[i-1][1] - k * x[i-1][0]) / m
 
     x[i][0] = x[i-1][0] + k1[0] * h
     x[i][1] = x[i-1][1] + k1[1] * h
@@ -33,7 +46,7 @@ def euler_sdm(h, start, end, m, c, k):
   return t, plotx
 
 if __name__ == "__main__":
-  x, y = euler_sdm(h, START, END, m, c, k)
+  x, y = euler_sdm(h, START, END, m, c, k, func_zero)
   fig, ax = plt.subplots()
 
   for i in range(len(x)):
