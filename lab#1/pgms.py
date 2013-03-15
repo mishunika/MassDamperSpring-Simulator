@@ -12,11 +12,18 @@ h = 1.0/60
 START = 0.0
 END = 60.0
 
-m = 10.0
-c = 15.0
-k = 20.0
+m = float(raw_input("Mass of the object:     "))
+c = float(raw_input("Constant of the spring: "))
+k = float(raw_input("Constant of the damper: "))
+sel = raw_input("Select function [1, 2, 3]: ")
 
-x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_st)
+if sel == '1':
+  x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_st)
+elif sel == '2':
+  x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_inst)
+elif sel == '3':
+  x, y = euler_sdm(h, START, END, m, c, k, func_zero)
+
 plt.plot(x, y)
 plt.ion()
 plt.show()
@@ -33,7 +40,7 @@ clock = pygame.time.Clock()
 # Setting the title of the window
 pygame.display.set_caption("Spring-Damper-Mass simulation")
 
-class MassCircle:
+class MassCircleSpring:
   def __init__(self, (x, y), size, color = (0, 0, 0), width = 1):
     self.index = 0
     self.x = x
@@ -122,7 +129,7 @@ class MassCircle:
     else:
       self.metal = False
 
-circle = MassCircle((50, y), 30, (90, 90, 90), 0)
+spring_object = MassCircleSpring((50, y), 30, (90, 90, 90), 0)
 
 restart_btn = pygbutton.PygButton((210, 10, 100, 30), 'Restart')
 pause_btn = pygbutton.PygButton((100, 10, 100, 30), 'Play / Pause')
@@ -141,21 +148,21 @@ while running:
     if event.type == pygame.QUIT:
       running = False
     if 'click' in restart_btn.handleEvent(event):
-      circle.reset()
+      spring_object.reset()
     if 'click' in pause_btn.handleEvent(event):
-      circle.pause()
+      spring_object.pause()
     if 'click' in rubber_btn.handleEvent(event):
-      circle.spring('rubber')
+      spring_object.spring('rubber')
       rubber_btn.bgcolor = GRAY
       metal_btn.bgcolor = LIGHTGRAY
     if 'click' in metal_btn.handleEvent(event):
-      circle.spring('metal')
+      spring_object.spring('metal')
       rubber_btn.bgcolor = LIGHTGRAY
       metal_btn.bgcolor = GRAY
   # Screen filling with white
   screen.fill((255, 255, 255))
 
-  circle.display()
+  spring_object.display()
   restart_btn.draw(screen)
   pause_btn.draw(screen)
   metal_btn.draw(screen)
