@@ -3,6 +3,10 @@ from pygame.locals import *
 from euler import *
 from time import sleep
 import matplotlib.pyplot as plt
+import pygbutton
+
+LIGHTGRAY = pygbutton.LIGHTGRAY
+GRAY = (120, 120, 120)
 
 h = 1.0/60
 START = 0.0
@@ -18,7 +22,7 @@ plt.ion()
 plt.show()
 
 # Defining the screen size
-screen_size = screen_width, screen_height = 800, 600
+screen_size = screen_width, screen_height = 320, 600
 
 # Defining the display
 screen = pygame.display.set_mode(screen_size, DOUBLEBUF)
@@ -41,6 +45,8 @@ class MassCircle:
     self.mult = 1
     self.offset = screen_height
     self.normalize()
+    self.running = False
+    self.metal = True
 
 
   def normalize(self):
@@ -57,7 +63,7 @@ class MassCircle:
     if self.index >= len(self.y):
       self.index = 0
 
-    val = y[self.index] + self.norm
+    val = self.y[self.index] + self.norm
     val *= self.mult
     val = self.offset - self.size*2 - val
 
@@ -66,32 +72,63 @@ class MassCircle:
 
 
   def display(self):
-    ty = self.get_y()
-    start_ball_y = ty - self.size
-    coils = 40
-    # thickness = self.offset - ty
-    # thickness /= 20
-    # thickness += 1
-    # pygame.draw.line(screen, (0,0,0), (self.x, 0), (self.x, ty), thickness)
-    points = ()
-    item = (self.x, start_ball_y)
-    points = (item, ) + points
-    item = (self.x, start_ball_y - 10)
-    points = (item, ) + points
-    tmp = start_ball_y - 10
-    incrementer = ( ( (start_ball_y) / float(coils) ) )
-    for i in reversed( range(coils + 10) ):
-      if i%2:
-        item = (self.x + 25, tmp)
-      else:
-        item = (self.x - 25, tmp)
-      points = (item,) + points
-      tmp -= incrementer
+    if not self.running and self.index:
+      self.index -= 1
 
-    pygame.draw.aalines(screen, (0,0,0), False, points, 4)
+    ty = self.get_y()
+    if self.metal:
+      start_ball_y = ty - self.size
+      coils = 60
+      points = ()
+      item = (self.x, start_ball_y)
+      points = (item, ) + points
+      item = (self.x, start_ball_y - 10)
+      points = (item, ) + points
+      tmp = start_ball_y - 10
+      incrementer = (start_ball_y) / float(coils)
+      for i in reversed( range(coils + 10) ):
+        if i%2:
+          item = (self.x + 25, tmp)
+        else:
+          item = (self.x - 25, tmp)
+        points = (item,) + points
+        tmp -= incrementer
+
+      pygame.draw.aalines(screen, (0,0,0), False, points, 4)
+    else:
+      thickness = self.offset - ty
+      thickness /= 20
+      thickness += 1
+      pygame.draw.line(screen, (0, 0, 255), (self.x, 0), (self.x, ty), thickness)
+
     pygame.draw.circle(screen, self.color, (self.x, ty), self.size, self.width)
 
-circle = MassCircle((100, y), 30, (90, 90, 90), 0)
+
+  def reset(self):
+    self.index = 0
+    self.running = True
+
+
+  def pause(self):
+    if self.running:
+      self.running = False
+    else:
+      self.running = True
+
+
+  def spring(self, choice):
+    if choice == 'metal':
+      self.metal = True
+    else:
+      self.metal = False
+
+circle = MassCircle((50, y), 30, (90, 90, 90), 0)
+
+restart_btn = pygbutton.PygButton((210, 10, 100, 30), 'Restart')
+pause_btn = pygbutton.PygButton((100, 10, 100, 30), 'Play / Pause')
+
+metal_btn = pygbutton.PygButton((100, 50, 100, 30), 'Metal spring', bgcolor=GRAY)
+rubber_btn = pygbutton.PygButton((210, 50, 100, 30), 'Rubber')
 
 max_fps = 60
 running = True
@@ -103,11 +140,27 @@ while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       running = False
-
+    if 'click' in restart_btn.handleEvent(event):
+      circle.reset()
+    if 'click' in pause_btn.handleEvent(event):
+      circle.pause()
+    if 'click' in rubber_btn.handleEvent(event):
+      circle.spring('rubber')
+      rubber_btn.bgcolor = GRAY
+      metal_btn.bgcolor = LIGHTGRAY
+    if 'click' in metal_btn.handleEvent(event):
+      circle.spring('metal')
+      rubber_btn.bgcolor = LIGHTGRAY
+      metal_btn.bgcolor = GRAY
   # Screen filling with white
   screen.fill((255, 255, 255))
 
   circle.display()
+  restart_btn.draw(screen)
+  pause_btn.draw(screen)
+  metal_btn.draw(screen)
+  rubber_btn.draw(screen)
+  pygame.display.update()
   # Displaying all the content
   pygame.display.flip()
 
