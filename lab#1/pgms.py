@@ -97,7 +97,7 @@ class MassCircle:
       pygame.draw.aalines(screen, (0,0,0), False, points, 4)
     else:
       thickness = self.offset - ty
-      thickness /= 20
+      thickness /= 10
       thickness += 1
       pygame.draw.line(screen, (0, 0, 255), (self.x, 0), (self.x, ty), thickness)
 
@@ -160,7 +160,6 @@ while running:
   pause_btn.draw(screen)
   metal_btn.draw(screen)
   rubber_btn.draw(screen)
-  pygame.display.update()
   # Displaying all the content
   pygame.display.flip()
 
