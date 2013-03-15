@@ -24,7 +24,7 @@ def func_sin_cos_inst(t):
 
 
 def func_sin_cos_st(t):
-  return math.sin(t) + math.cos(t * 2)
+  return 5 * math.sin(t) + 15 * math.cos(t * 2)
 
 def euler_sdm(h, start, end, m, c, k, f):
   t = np.linspace(START, END, num=((1/h)* (END-START)))

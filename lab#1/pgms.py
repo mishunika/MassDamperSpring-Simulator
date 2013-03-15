@@ -10,9 +10,9 @@ END = 60.0
 
 m = 10.0
 c = 15.0
-k = 100.0
+k = 20.0
 
-x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_inst)
+x, y = euler_sdm(h, START, END, m, c, k, func_sin_cos_st)
 plt.plot(x, y)
 plt.ion()
 plt.show()
@@ -67,13 +67,31 @@ class MassCircle:
 
   def display(self):
     ty = self.get_y()
-    thickness = self.offset - ty
-    thickness /= 20
-    thickness += 1
-    pygame.draw.line(screen, (0,0,0), (self.x, 0), (self.x, ty), thickness)
+    start_ball_y = ty - self.size
+    coils = 40
+    # thickness = self.offset - ty
+    # thickness /= 20
+    # thickness += 1
+    # pygame.draw.line(screen, (0,0,0), (self.x, 0), (self.x, ty), thickness)
+    points = ()
+    item = (self.x, start_ball_y)
+    points = (item, ) + points
+    item = (self.x, start_ball_y - 10)
+    points = (item, ) + points
+    tmp = start_ball_y - 10
+    incrementer = ( ( (start_ball_y) / float(coils) ) )
+    for i in reversed( range(coils + 10) ):
+      if i%2:
+        item = (self.x + 25, tmp)
+      else:
+        item = (self.x - 25, tmp)
+      points = (item,) + points
+      tmp -= incrementer
+
+    pygame.draw.aalines(screen, (0,0,0), False, points, 4)
     pygame.draw.circle(screen, self.color, (self.x, ty), self.size, self.width)
 
-circle = MassCircle((300, y), 30, (90, 90, 90), 0)
+circle = MassCircle((100, y), 30, (90, 90, 90), 0)
 
 max_fps = 60
 running = True
