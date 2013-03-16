@@ -1,7 +1,7 @@
 # Operational research
 ###### student gr. FAF-111: Mihai Iachimovschi
 
-# Topic: Simulation of a Mass-Damper-Spring Simulator
+# Topic: Simulation of a Mass-Damper-Spring System
 ## Intro
 
 The purpose of this laboratory work is to simulate a damped harmonic simulator. The main problem was to represent mathematically the problem.
@@ -18,7 +18,7 @@ And as you warned us in the lab requirements, we had lot of fun. :smile:
 
 
 ## Coding
-The program was written fully in python and I've used the numpy, matplotlib, pygame libraries in order to make things happen.
+The program was written fully in python and I've used the [numpy](http://www.numpy.org/), [matplotlib](http://matplotlib.org/), [pygame](http://www.pygame.org/) libraries in order to make things happen.
 
 
 Here is a little [demo](http://www.youtube.com/watch?v=d_v3KKUh3Ks&hd=1)
@@ -28,3 +28,4 @@ Here is a little [demo](http://www.youtube.com/watch?v=d_v3KKUh3Ks&hd=1)
 At this laboratory work I had the opportunity to represent mathematically and to simulate a real mechanical process. It is very useful for us, as future engineers to be able to transpose the real-world processes in a mathematical domain in order to be able to make beautiful computations.
 
 The main difficulty was to understand the mathematical problem and to learn how Euler's method works. The rest of the process was fun.
+
